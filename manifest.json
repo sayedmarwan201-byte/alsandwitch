@@ -1,0 +1,16 @@
+{
+  "name": "السندوتش",
+  "short_name": "السندوتش",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#141110",
+  "theme_color": "#e8a93d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
