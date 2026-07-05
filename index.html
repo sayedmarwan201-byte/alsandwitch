@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>السندوتش | اطلب أونلاين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141110;
+    --bg-soft:#1c1815;
+    --panel:#211c18;
+    --gold:#e8a93d;
+    --gold-deep:#c97a2b;
+    --cream:#f6efe3;
+    --muted:#a89c8c;
+    --line:#3a322b;
+    --whatsapp:#25d366;
+    --danger:#d9542b;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Cairo',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+
+  /* ---------- Brush stroke signature ---------- */
+  .brush{
+    position:relative;
+    display:inline-block;
+    padding:.15em .5em;
+  }
+  .brush::before{
+    content:"";
+    position:absolute;
+    inset:.05em -.1em;
+    background:var(--gold);
+    border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+    transform:rotate(-1.2deg);
+    z-index:0;
+  }
+  .brush span{position:relative;z-index:1;color:#1a1512;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(20,17,16,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    max-width:1180px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+    gap:16px;
+  }
+  .logo{
+    font-weight:900;font-size:1.5rem;letter-spacing:.5px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .bolt{color:var(--gold);}
+  nav.main-nav{display:flex;gap:22px;font-weight:700;font-size:.95rem;color:var(--muted);}
+  nav.main-nav a:hover{color:var(--gold);}
+  .header-actions{display:flex;align-items:center;gap:12px;}
+  .order-type-pill{
+    display:flex;background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:4px;font-size:.82rem;font-weight:700;
+  }
+  .order-type-pill button{
+    padding:6px 14px;border-radius:999px;background:transparent;color:var(--muted);
+    transition:.2s;
+  }
+  .order-type-pill button.active{background:var(--gold);color:#1a1512;}
+  .cart-btn{
+    position:relative;background:var(--panel);border:1px solid var(--line);
+    color:var(--cream);width:44px;height:44px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+  }
+  .cart-badge{
+    position:absolute;top:-4px;left:-4px;background:var(--danger);color:#fff;
+    font-size:.68rem;font-weight:800;min-width:19px;height:19px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;padding:0 4px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:1180px;margin:0 auto;
+    padding:56px 20px 40px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;
+  }
+  .hero-eyebrow{
+    color:var(--gold);font-weight:800;font-size:.95rem;letter-spacing:1px;
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;
+  }
+  .hero-eyebrow::before{content:"";width:26px;height:2px;background:var(--gold);display:inline-block;}
+  .hero h1{
+    font-size:clamp(2.2rem,5vw,3.4rem);
+    font-weight:900;line-height:1.15;margin:0 0 18px;
+  }
+  .hero h1 .hl{color:var(--gold);}
+  .hero p.sub{color:var(--muted);font-size:1.08rem;line-height:1.8;margin:0 0 28px;max-width:520px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    padding:15px 28px;border-radius:12px;font-weight:800;font-size:.98rem;
+    display:inline-flex;align-items:center;gap:8px;transition:.2s;
+  }
+  .btn-primary{background:var(--gold);color:#1a1512;}
+  .btn-primary:hover{background:var(--gold-deep);}
+  .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--cream);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+  .hero-visual{
+    position:relative;aspect-ratio:1/1;background:var(--panel);
+    border-radius:32px;border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero-visual img{width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-visual::after{
+    content:"جديد";position:absolute;top:22px;left:22px;
+    background:var(--danger);color:#fff;font-weight:800;font-size:.78rem;
+    padding:7px 16px;border-radius:999px;transform:rotate(-6deg);
+  }
+  .hero-stats{
+    display:flex;gap:26px;margin-top:30px;flex-wrap:wrap;
+  }
+  .hero-stats div{font-size:.85rem;color:var(--muted);font-weight:700;}
+  .hero-stats b{display:block;color:var(--gold);font-size:1.3rem;}
+
+  /* ---------- Category nav ---------- */
+  .cat-nav-wrap{
+    position:sticky;top:73px;z-index:40;
+    background:var(--bg);border-bottom:1px solid var(--line);
+  }
+  .cat-nav{
+    max-width:1180px;margin:0 auto;padding:14px 20px;
+    display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;
+  }
+  .cat-nav::-webkit-scrollbar{display:none;}
+  .cat-chip{
+    flex-shrink:0;padding:9px 18px;border-radius:999px;
+    background:var(--panel);border:1px solid var(--line);
+    font-weight:700;font-size:.88rem;color:var(--muted);white-space:nowrap;
+    transition:.2s;
+  }
+  .cat-chip.active,.cat-chip:hover{background:var(--gold);color:#1a1512;border-color:var(--gold);}
+
+  /* ---------- Menu ---------- */
+  .menu-wrap{max-width:1180px;margin:0 auto;padding:10px 20px 60px;}
+  .menu-section{padding-top:38px;scroll-margin-top:150px;}
+  .section-title{
+    display:flex;align-items:center;gap:14px;margin-bottom:22px;
+  }
+  .section-title h2{font-size:1.7rem;font-weight:900;margin:0;}
+  .section-title .count{color:var(--muted);font-size:.85rem;font-weight:700;}
+  .product-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;
+  }
+  .product-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;display:flex;flex-direction:column;gap:12px;
+    transition:.2s;
+  }
+  .product-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+  .product-top{display:flex;align-items:center;gap:12px;}
+  .product-icon{
+    width:56px;height:56px;border-radius:14px;background:var(--bg-soft);
+    display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;
+    background-size:cover;background-position:center;
+  }
+  .field-error{
+    color:var(--danger);font-size:.76rem;font-weight:700;margin-top:6px;display:none;
+  }
+  .field-error.show{display:block;}
+  .field textarea.error,.field input.error{border-color:var(--danger);}
+  .order-confirm-box{
+    display:none;background:rgba(37,211,102,.12);border:1.5px solid var(--whatsapp);
+    border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;
+  }
+  .order-confirm-box.show{display:block;}
+  .order-confirm-box .num{font-weight:900;font-size:1.15rem;color:var(--whatsapp);margin-bottom:4px;}
+  .order-confirm-box .msg{font-size:.8rem;color:var(--muted);font-weight:700;}
+  .about-section{max-width:1180px;margin:0 auto;padding:60px 20px;}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+  .about-grid img{width:100%;border-radius:24px;border:1px solid var(--line);aspect-ratio:4/3;object-fit:cover;}
+  .about-text h2{font-size:1.9rem;font-weight:900;margin:0 0 18px;}
+  .about-text p{color:var(--muted);line-height:1.9;margin:0 0 16px;font-size:.98rem;}
+  .about-badges{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;}
+  .about-badge{
+    display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);
+    padding:10px 16px;border-radius:12px;font-weight:700;font-size:.85rem;
+  }
+  @media(max-width:860px){.about-grid{grid-template-columns:1fr;}}
+  .product-name{font-weight:800;font-size:1.02rem;line-height:1.35;}
+  .variant-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .variant-chip{
+    padding:6px 11px;border-radius:8px;background:var(--bg-soft);
+    border:1px solid var(--line);font-size:.78rem;font-weight:700;color:var(--muted);
+  }
+  .variant-chip.selected{background:var(--gold);color:#1a1512;border-color:var(--gold);}
+  .product-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+  .price-tag{font-weight:900;font-size:1.15rem;color:var(--gold);}
+  .price-tag small{color:var(--muted);font-size:.7rem;font-weight:700;}
+  .add-btn{
+    background:var(--gold);color:#1a1512;padding:9px 16px;border-radius:10px;
+    font-weight:800;font-size:.85rem;display:flex;align-items:center;gap:6px;
+  }
+  .add-btn:hover{background:var(--gold-deep);}
+
+  /* ---------- Cart sidebar ---------- */
+  .cart-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:90;
+    opacity:0;pointer-events:none;transition:.25s;
+  }
+  .cart-overlay.open{opacity:1;pointer-events:auto;}
+  .cart-panel{
+    position:fixed;top:0;left:-420px;height:100%;width:400px;max-width:92vw;
+    background:var(--bg-soft);z-index:100;border-left:1px solid var(--line);
+    display:flex;flex-direction:column;transition:.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .cart-panel.open{left:0;}
+  .cart-head{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .cart-head h3{margin:0;font-size:1.2rem;font-weight:900;}
+  .close-btn{background:var(--panel);border:1px solid var(--line);width:36px;height:36px;border-radius:50%;color:var(--cream);font-size:1rem;}
+  .cart-body{flex:1;overflow-y:auto;padding:16px 20px;}
+  .cart-empty{text-align:center;color:var(--muted);padding:60px 10px;font-weight:700;}
+  .cart-item{
+    display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:flex-start;
+  }
+  .cart-item-icon{width:44px;height:44px;border-radius:10px;background:var(--panel);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+  .cart-item-info{flex:1;}
+  .cart-item-name{font-weight:800;font-size:.92rem;}
+  .cart-item-variant{color:var(--muted);font-size:.78rem;font-weight:700;}
+  .qty-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+  .qty-btn{width:26px;height:26px;border-radius:8px;background:var(--panel);border:1px solid var(--line);color:var(--cream);font-weight:900;}
+  .qty-val{font-weight:800;min-width:16px;text-align:center;}
+  .remove-btn{color:var(--danger);font-size:.78rem;font-weight:700;margin-right:auto;}
+  .cart-item-price{font-weight:800;color:var(--gold);white-space:nowrap;}
+
+  .cart-footer{border-top:1px solid var(--line);padding:18px 20px;background:var(--panel);}
+  .order-type-toggle{display:flex;gap:8px;margin-bottom:14px;}
+  .order-type-toggle button{
+    flex:1;padding:11px;border-radius:10px;background:var(--bg-soft);border:1.5px solid var(--line);
+    font-weight:800;font-size:.85rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .order-type-toggle button.active{background:var(--gold);color:#1a1512;border-color:var(--gold);}
+  .field{margin-bottom:10px;}
+  .field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:5px;}
+  .field input,.field textarea{
+    width:100%;padding:11px 12px;border-radius:9px;background:var(--bg-soft);
+    border:1px solid var(--line);color:var(--cream);font-family:inherit;font-size:.9rem;
+  }
+  .field textarea{resize:none;min-height:56px;}
+  .subtotal-row{display:flex;justify-content:space-between;font-weight:900;font-size:1.15rem;margin:14px 0;}
+  .subtotal-row span:last-child{color:var(--gold);}
+  .whatsapp-btn{
+    width:100%;background:var(--whatsapp);color:#fff;padding:15px;border-radius:12px;
+    font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .whatsapp-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .hint-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:8px;line-height:1.6;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--panel);border-top:1px solid var(--line);padding:44px 20px 28px;margin-top:40px;}
+  .footer-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+  .footer-brand .logo{margin-bottom:8px;}
+  .footer-brand p{color:var(--muted);font-size:.88rem;max-width:320px;line-height:1.7;}
+  .footer-links{display:flex;gap:60px;flex-wrap:wrap;}
+  .footer-col h4{font-size:.85rem;color:var(--gold);margin:0 0 12px;font-weight:800;}
+  .footer-col a{display:block;color:var(--muted);font-size:.88rem;margin-bottom:9px;font-weight:600;}
+  .footer-col a:hover{color:var(--cream);}
+  .footer-bottom{
+    max-width:1180px;margin:30px auto 0;padding-top:20px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:.78rem;text-align:center;
+  }
+
+  .toast{
+    position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120%);
+    background:var(--gold);color:#1a1512;padding:13px 26px;border-radius:12px;
+    font-weight:800;font-size:.9rem;z-index:200;transition:.3s;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr;padding-top:32px;}
+    .hero-visual{aspect-ratio:16/10;}
+    nav.main-nav{display:none;}
+    .cart-panel{width:100%;left:-100%;}
+    .cat-nav-wrap{top:66px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span class="bolt">⚡</span> السندوتش</div>
+    <nav class="main-nav">
+      <a href="#menu-top">المنيو</a>
+      <a href="#about">عن المطعم</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+    <div class="header-actions">
+      <div class="order-type-pill">
+        <button id="pill-delivery" class="active" onclick="setOrderType('delivery')">🛵 توصيل</button>
+        <button id="pill-takeaway" onclick="setOrderType('takeaway')">🥡 استلام</button>
+      </div>
+      <button class="cart-btn" onclick="openCart()">🛒<span class="cart-badge" id="cartBadge">0</span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">فرايز • برجر • كريب • ريزو</div>
+    <h1>جعان دلوقتي؟<br>اطلب من <span class="hl">السندوتش</span> 🔥</h1>
+    <p class="sub">أكلنا بيتحضر طازة أول ما تطلب. اختار من المنيو، حدد توصيل أو استلام من الفرع، وأكد طلبك مباشرة على واتساب.</p>
+    <div class="hero-ctas">
+      <a href="#menu-top" class="btn btn-primary">📋 شوف المنيو</a>
+      <a href="https://wa.me/201144495379" target="_blank" class="btn btn-ghost">💬 كلمنا واتساب</a>
+    </div>
+    <div class="hero-stats">
+      <div><b>9</b>أقسام في المنيو</div>
+      <div><b>85+</b>صنف مختلف</div>
+      <div><b>سوري / L / M</b>أحجام متعددة</div>
+    </div>
+  </div>
+  <div class="hero-visual"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="برجر السندوتش"></div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="about-grid">
+    <img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=900&q=80" alt="نظافة وجودة السندوتش">
+    <div class="about-text">
+      <h2>🥪 عن مطعم السندوتش</h2>
+      <p>في السندوتش، بنعتبر إن الأكل مش مجرد وجبة، ده تجربة لازم تبقى ممتازة من أول لحظة لحد آخر قضمة. من أوت خبرة في تحضير السندوتشات والبرجر والكريبات، بنشتغل على تقديم أكل طازة يومياً بمكونات مختارة بعناية، من غير مساومة على الجودة.</p>
+      <p>النظافة عندنا مش تفصيلة، دي أساس شغلنا. المطبخ بيتنضف باستمرار، الأدوات والمكونات بتتغير أول بأول، والفريق بيلتزم بأعلى معايير النظافة الشخصية في كل خطوة من التحضير للتغليف. إحنا عارفين إن ثقتك في اللي بناكله هي أهم حاجة، وده اللي بنحافظ عليه في كل طلب.</p>
+      <div class="about-badges">
+        <div class="about-badge">✅ مكونات طازة يومياً</div>
+        <div class="about-badge">🧼 معايير نظافة صارمة</div>
+        <div class="about-badge">⚡ تحضير سريع</div>
+        <div class="about-badge">🔥 طعم أصلي مضمون</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cat-nav-wrap">
+  <div class="cat-nav" id="catNav"></div>
+</div>
+
+<div class="menu-wrap" id="menu-top"></div>
+
+<footer id="contact">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo"><span class="bolt">⚡</span> السندوتش</div>
+      <p>أشهى السندوتشات والبرجر والكريبات، طازة يومياً وجاهزة للتوصيل أو الاستلام من الفرع.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>تواصل معانا</h4>
+        <a href="tel:01144495379">📞 01144495379</a>
+        <a href="https://wa.me/201144495379" target="_blank">💬 واتساب</a>
+      </div>
+      <div class="footer-col">
+        <h4>تابعنا</h4>
+        <a href="https://www.facebook.com" target="_blank">📘 فيسبوك — AL_SANDWITCH</a>
+        <a href="https://www.instagram.com/al_sandwitch" target="_blank">📷 انستجرام — al_sandwitch</a>
+        <a href="https://www.tiktok.com/@al_sandwitch" target="_blank">🎵 تيك توك — al_sandwitch</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">هذا موقع تجريبي (ديمو) لعرض الفكرة — الأسعار منقولة من صورة المنيو وممكن تتعدل بسهولة قبل الإطلاق الفعلي.</div>
+</footer>
+
+<div class="cart-overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <h3>سلة الطلبات</h3>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="order-type-toggle">
+      <button id="toggle-delivery" class="active" onclick="setOrderType('delivery')">🛵 توصيل</button>
+      <button id="toggle-takeaway" onclick="setOrderType('takeaway')">🥡 استلام من الفرع</button>
+    </div>
+    <div class="field"><label>الاسم</label><input id="custName" placeholder="اسمك"></div>
+    <div class="field"><label>رقم الهاتف</label><input id="custPhone" placeholder="01xxxxxxxxx"></div>
+    <div class="field" id="addressField">
+      <label>العنوان بالتفصيل</label>
+      <textarea id="custAddress" placeholder="الحي، الشارع، رقم العمارة..." oninput="clearFieldError('custAddress','addressError')"></textarea>
+      <div class="field-error" id="addressError">من فضلك اكتب العنوان بالتفصيل عشان نقدر نوصلك الطلب</div>
+    </div>
+    <div class="field"><label>ملاحظات (اختياري)</label><input id="custNotes" placeholder="مثلاً: من غير بصل"></div>
+    <div class="subtotal-row"><span>الإجمالي</span><span id="cartTotal">0 ج.م</span></div>
+    <div class="order-confirm-box" id="orderConfirmBox">
+      <div class="num" id="orderNumberText"></div>
+      <div class="msg">احتفظ بالرقم ده للاستعلام عن طلبك. جاري تحويلك لواتساب...</div>
+    </div>
+    <button class="whatsapp-btn" id="confirmBtn" onclick="confirmOrder()">💬 تأكيد الطلب عبر واتساب</button>
+    <div class="hint-note">هيتفتح واتساب برسالة جاهزة فيها كل تفاصيل طلبك ورقم الأوردر، وهتأكدها مباشرة مع الفرع.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= MENU DATA ================= */
+const MENU = [
+  {id:'fries', title:'فرنش فرايز', icon:'🍟', kind:'single', items:[
+    ['سندوتش بطاطس صغير',15],['سندوتش بطاطس كبير',25],['تشيبز بطاطس وسط',25],['تشيبز بطاطس كبير',35],
+    ['سوري بطاطس',30],['سوري تشيبز بطاطس',40],['باكت بطاطس',20],['باكت فريسكاس',30],
+    ['كريب بطاطس',50],['كونو بطاطس',65],['طبق تشيبز بطاطس',35],['طبق تشيبز فريسكاس',45],
+    ['طبق تشيبز بطاطس (زنجر)',60],['طبق تشيبز بطاطس (هوت دوج)',45],['طبق تشيبز بطاطس (سجق)',50],
+    ['طبق تشيبز بطاطس (برجر)',45],['طبق تشيبز بطاطس (بانيه)',45],['طبق تشيبز بطاطس (كرسبي)',60],
+    ['طبق تشيبز بطاطس (سوبر كرانشي)',55],['طبق تشيبز بطاطس (كفتة)',55]
+  ]},
+  {id:'burger', title:'برجر', icon:'🍔', kind:'single', items:[
+    ['برجر صغير',25],['تشيز برجر صغير',30],['دبل تشيز برجر صغير',45],['برجر جامبو',45],
+    ['تشيز برجر جامبو',55],['تشيز برجر جامبو مشروم',65],['دبل تشيز برجر جامبو',75],
+    ['تريبل تشيز برجر جامبو',90],['تشيكن برجر',35],['تشيكن تشيز برجر',45],
+    ['دبل تشيكن تشيز برجر',65],['تريبل تشيكن تشيز برجر',85],['دبل برجر السندوتش',75]
+  ]},
+  {id:'crepemix', title:'كريبات مكس', icon:'🌯', kind:'konokreb', items:[
+    ['كريب السندوتش (زنجر - شيش - هوت دوج)',{'كونو':95,'كريب':80}],
+    ['كريب هامر (زنجر - شيش - كرسبي)',{'كونو':95,'كريب':80}],
+    ['فاهيتا فراخ (شيش طاووق - مشروم)',{'كونو':95,'كريب':80}],
+    ['مكس من اختيارك (3 أصناف)',{'كونو':95,'كريب':80}]
+  ]},
+  {id:'crepebig', title:'كريبات بيج', icon:'🥙', kind:'big', items:[
+    ['زنجر بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['سوبر كرانشي بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['مشكل فراخ بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['مشكل لحوم بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['كفتة بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['سجق بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['بيج السندوتش',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['برجر جامبو بيج',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['السندوتش برو ماكس',{'كونو 600جم':150,'كريب 500جم':130}],
+    ['كوردن بلو بيج',{'كونو 600جم':150,'كريب 500جم':130}]
+  ]},
+  {id:'rizo', title:'ريزو', icon:'🍚', kind:'lm', items:[
+    ['ريزو زنجر',{'M':60,'L':90}],['ريزو شيش',{'M':60,'L':90}],
+    ['ريزو كفتة',{'M':60,'L':90}],['ريزو سجق',{'M':60,'L':90}]
+  ]},
+  {id:'chickensand', title:'سندوتشات فراخ', icon:'🥪', kind:'full', items:[
+    ['كوردن بلو',{'سوري':70,'M':30,'L':50,'كونو':90,'كريب':75}],
+    ['بانيه',{'سوري':65,'M':25,'L':40,'كونو':80,'كريب':65}],
+    ['زنجر',{'سوري':70,'M':30,'L':50,'كونو':90,'كريب':75}],
+    ['كرسبي',{'سوري':65,'M':25,'L':40,'كونو':80,'كريب':65}],
+    ['سوبر كرانشي',{'سوري':70,'M':30,'L':55,'كونو':90,'كريب':75}],
+    ['شيش طاووق',{'سوري':70,'M':30,'L':50,'كونو':85,'كريب':70}],
+    ['زنجر % شيش',{'سوري':75,'M':35,'L':60,'كونو':95,'كريب':80}],
+    ['تشيز زنجر',{'سوري':75,'M':35,'L':60,'كونو':95,'كريب':80}],
+    ['تشيز كرانشي',{'سوري':70,'M':35,'L':50,'كونو':90,'كريب':75}],
+    ['فاهيتا فراخ',{'سوري':70,'M':35,'L':55,'كونو':95,'كريب':80}],
+    ['مشكل فراخ',{'سوري':70,'M':35,'L':55,'كونو':95,'كريب':80}]
+  ]},
+  {id:'chickencrepe', title:'كريبات فراخ إضافية', icon:'🌯', kind:'konokreb', items:[
+    ['زنجر استربس',{'كونو':90,'كريب':75}],
+    ['برجر فراخ',{'كونو':85,'كريب':70}],
+    ['تشيلي زنجر',{'كونو':95,'كريب':80}],
+    ['تشيلي كرانشي',{'كونو':95,'كريب':80}],
+    ['رانش كرانشي',{'كونو':90,'كريب':75}],
+    ['زنجر رانش',{'كونو':95,'كريب':80}]
+  ]},
+  {id:'meatsand', title:'سندوتشات لحوم', icon:'🥩', kind:'full', items:[
+    ['كفتة جريل',{'سوري':65,'M':30,'L':45,'كونو':90,'كريب':75}],
+    ['كبدة % سجق',{'سوري':65,'M':30,'L':50,'كونو':85,'كريب':70}],
+    ['برجر ميكسيكان',{'سوري':60,'M':35,'L':50,'كونو':95,'كريب':80}],
+    ['سجق',{'سوري':65,'M':30,'L':45,'كونو':85,'كريب':70}],
+    ['سوسيس',{'سوري':60,'M':30,'L':45,'كونو':95,'كريب':80}],
+    ['هوت دوج',{'سوري':60,'M':30,'L':45,'كونو':85,'كريب':70}],
+    ['مشكل لحوم',{'سوري':65,'M':30,'L':50,'كونو':95,'كريب':80}],
+    ['كبدة اسكندراني',{'سوري':65,'M':30,'L':45,'كونو':90,'كريب':75}],
+    ['كبدة مشروم',{'سوري':70,'M':35,'L':50,'كونو':95,'كريب':80}]
+  ]},
+  {id:'meatcrepe', title:'كريبات لحوم إضافية', icon:'🌯', kind:'konokreb', items:[
+    ['برجر صغير',{'كونو':85,'كريب':70}],
+    ['برجر جامبو',{'كونو':95,'كريب':80}]
+  ]}
+];
+
+const ICONS = {fries:'🍟',burger:'🍔',crepemix:'🌯',crepebig:'🥙',rizo:'🍚',chickensand:'🥪',chickencrepe:'🌯',meatsand:'🥩',meatcrepe:'🌯'};
+
+const CATEGORY_IMAGES = {
+  fries: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=200&q=70',
+  burger: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=70',
+  crepemix: 'https://images.unsplash.com/photo-1719282431987-2382e77e5a1b?auto=format&fit=crop&w=200&q=70',
+  crepebig: 'https://images.unsplash.com/photo-1719282431987-2382e77e5a1b?auto=format&fit=crop&w=200&q=70',
+  rizo: 'https://images.unsplash.com/photo-1679279726946-a158b8bcaa23?auto=format&fit=crop&w=200&q=70',
+  chickensand: 'https://images.unsplash.com/photo-1760533536738-f0965fd52354?auto=format&fit=crop&w=200&q=70',
+  chickencrepe: 'https://images.unsplash.com/photo-1719282431987-2382e77e5a1b?auto=format&fit=crop&w=200&q=70',
+  meatsand: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=70',
+  meatcrepe: 'https://images.unsplash.com/photo-1719282431987-2382e77e5a1b?auto=format&fit=crop&w=200&q=70'
+};
+
+/* ================= STATE ================= */
+let cart = []; // {key, name, variant, price, qty, icon}
+let orderType = 'delivery';
+
+/* ================= RENDER MENU ================= */
+const catNav = document.getElementById('catNav');
+const menuWrap = document.getElementById('menu-top');
+
+MENU.forEach(section=>{
+  const chip = document.createElement('a');
+  chip.href = '#sec-'+section.id;
+  chip.className = 'cat-chip';
+  chip.textContent = section.icon+' '+section.title;
+  chip.onclick = ()=>{document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));chip.classList.add('active');};
+  catNav.appendChild(chip);
+
+  const sec = document.createElement('section');
+  sec.className = 'menu-section';
+  sec.id = 'sec-'+section.id;
+  sec.innerHTML = `<div class="section-title"><h2>${section.icon} ${section.title}</h2><span class="count">${section.items.length} صنف</span></div><div class="product-grid" id="grid-${section.id}"></div>`;
+  menuWrap.appendChild(sec);
+
+  const grid = sec.querySelector('.product-grid');
+  section.items.forEach((item,idx)=>{
+    const name = item[0];
+    const priceData = item[1];
+    const isSingle = section.kind === 'single';
+    const variants = isSingle ? {'':priceData} : priceData;
+    const variantKeys = Object.keys(variants);
+    let selected = variantKeys[0];
+
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    const variantHtml = isSingle ? '' : `<div class="variant-row" data-key="${section.id}-${idx}">
+      ${variantKeys.map((v,i)=>`<button class="variant-chip ${i===0?'selected':''}" data-v="${v}">${v}: ${variants[v]}</button>`).join('')}
+    </div>`;
+
+    card.innerHTML = `
+      <div class="product-top">
+        <div class="product-icon" style="background-image:url('${CATEGORY_IMAGES[section.id]}')"></div>
+        <div class="product-name">${name}</div>
+      </div>
+      ${variantHtml}
+      <div class="product-bottom">
+        <div class="price-tag" id="price-${section.id}-${idx}">${variants[selected]} <small>ج.م</small></div>
+        <button class="add-btn" data-id="${section.id}-${idx}">＋ أضف</button>
+      </div>
+    `;
+    grid.appendChild(card);
+
+    if(!isSingle){
+      const row = card.querySelector('.variant-row');
+      row.querySelectorAll('.variant-chip').forEach(chipBtn=>{
+        chipBtn.onclick = ()=>{
+          row.querySelectorAll('.variant-chip').forEach(c=>c.classList.remove('selected'));
+          chipBtn.classList.add('selected');
+          selected = chipBtn.dataset.v;
+          card.querySelector(`#price-${section.id}-${idx}`).innerHTML = `${variants[selected]} <small>ج.م</small>`;
+        };
+      });
+    }
+
+    card.querySelector('.add-btn').onclick = ()=>{
+      addToCart(name, isSingle ? '' : selected, variants[selected], CATEGORY_IMAGES[section.id]);
+    };
+  });
+});
+
+/* ================= CART LOGIC ================= */
+function addToCart(name, variant, price, icon){
+  const key = name+'|'+variant;
+  const existing = cart.find(c=>c.key===key);
+  if(existing){existing.qty++;}
+  else{cart.push({key,name,variant,price,qty:1,icon});}
+  renderCart();
+  showToast(`تمت إضافة ${name}${variant?' ('+variant+')':''} للسلة ✅`);
+  updateBadge();
+}
+
+function changeQty(key, delta){
+  const item = cart.find(c=>c.key===key);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cart = cart.filter(c=>c.key!==key);
+  renderCart();
+  updateBadge();
+}
+
+function removeItem(key){
+  cart = cart.filter(c=>c.key!==key);
+  renderCart();
+  updateBadge();
+}
+
+function updateBadge(){
+  const total = cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartBadge').textContent = total;
+}
+
+function renderCart(){
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  if(cart.length===0){
+    body.innerHTML = '<div class="cart-empty">🛒<br>السلة فاضية دلوقتي<br>ابدأ اختار من المنيو</div>';
+    footer.style.display = 'none';
+    return;
+  }
+  footer.style.display = 'block';
+  body.innerHTML = cart.map(c=>`
+    <div class="cart-item">
+      <div class="cart-item-icon" style="background-image:url('${c.icon}');background-size:cover;background-position:center;"></div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${c.name}</div>
+        ${c.variant?`<div class="cart-item-variant">${c.variant}</div>`:''}
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty('${c.key.replace(/'/g,"\\'")}',-1)">−</button>
+          <span class="qty-val">${c.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${c.key.replace(/'/g,"\\'")}',1)">+</button>
+          <button class="remove-btn" onclick="removeItem('${c.key.replace(/'/g,"\\'")}')">حذف</button>
+        </div>
+      </div>
+      <div class="cart-item-price">${c.price*c.qty} ج.م</div>
+    </div>
+  `).join('');
+  const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  document.getElementById('cartTotal').textContent = total+' ج.م';
+}
+
+/* ================= ORDER TYPE ================= */
+function setOrderType(type){
+  orderType = type;
+  document.getElementById('pill-delivery').classList.toggle('active', type==='delivery');
+  document.getElementById('pill-takeaway').classList.toggle('active', type==='takeaway');
+  document.getElementById('toggle-delivery').classList.toggle('active', type==='delivery');
+  document.getElementById('toggle-takeaway').classList.toggle('active', type==='takeaway');
+  document.getElementById('addressField').style.display = type==='delivery' ? 'block' : 'none';
+}
+
+/* ================= CART PANEL OPEN/CLOSE ================= */
+function openCart(){
+  document.getElementById('cartPanel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+/* ================= TOAST ================= */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ================= FIELD ERROR HELPERS ================= */
+function clearFieldError(fieldId, errorId){
+  document.getElementById(fieldId).classList.remove('error');
+  document.getElementById(errorId).classList.remove('show');
+}
+function setFieldError(fieldId, errorId){
+  const field = document.getElementById(fieldId);
+  field.classList.add('error');
+  document.getElementById(errorId).classList.add('show');
+  field.focus();
+  field.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ================= ORDER NUMBER ================= */
+function generateOrderNumber(){
+  const rand = Math.floor(1000 + Math.random()*9000);
+  return 'SW-'+rand;
+}
+
+/* ================= CONFIRM ORDER -> WHATSAPP ================= */
+function confirmOrder(){
+  if(cart.length===0){showToast('السلة فاضية!');return;}
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const address = document.getElementById('custAddress').value.trim();
+  const notes = document.getElementById('custNotes').value.trim();
+
+  if(!name || !phone){showToast('من فضلك اكتب الاسم ورقم الهاتف');return;}
+  if(orderType==='delivery' && !address){
+    setFieldError('custAddress','addressError');
+    showToast('من فضلك اكتب العنوان للتوصيل');
+    return;
+  }
+  clearFieldError('custAddress','addressError');
+
+  const orderNumber = generateOrderNumber();
+  const itemsList = cart.map(c=>`• ${c.name}${c.variant?' ('+c.variant+')':''} × ${c.qty} = ${c.price*c.qty} ج.م`).join('\n');
+  const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+
+  let msg = `طلب جديد من موقع السندوتش 🥪\n`;
+  msg += `رقم الأوردر: ${orderNumber}\n\n`;
+  msg += `الاسم: ${name}\n`;
+  msg += `الهاتف: ${phone}\n`;
+  msg += `نوع الطلب: ${orderType==='delivery' ? '🛵 توصيل' : '🥡 استلام من الفرع'}\n`;
+  if(orderType==='delivery') msg += `العنوان: ${address}\n`;
+  if(notes) msg += `ملاحظات: ${notes}\n`;
+  msg += `\nتفاصيل الطلب:\n${itemsList}\n\n`;
+  msg += `الإجمالي: ${total} ج.م`;
+
+  const url = `https://wa.me/201144495379?text=${encodeURIComponent(msg)}`;
+
+  // Show a clear on-screen confirmation with the order number, then redirect reliably.
+  const box = document.getElementById('orderConfirmBox');
+  document.getElementById('orderNumberText').textContent = `✅ تم تجهيز طلبك رقم ${orderNumber}`;
+  box.classList.add('show');
+  const btn = document.getElementById('confirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري التحويل لواتساب...';
+
+  setTimeout(()=>{
+    const popup = window.open(url, '_blank');
+    if(!popup || popup.closed || typeof popup.closed === 'undefined'){
+      // Popup blocked (common inside embedded previews) -> fall back to same-tab redirect
+      window.location.href = url;
+    }
+    btn.disabled = false;
+    btn.textContent = '💬 تأكيد الطلب عبر واتساب';
+  }, 600);
+}
+
+/* init */
+setOrderType('delivery');
+renderCart();
+</script>
+</body>
+</html>
